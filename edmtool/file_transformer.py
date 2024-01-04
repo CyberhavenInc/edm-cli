@@ -13,7 +13,7 @@ from edmtool.errors import CellIsEmptyError, EncodedFileExistsError, DifferentCe
 class FileTransformer:
     _encoded_delimiter = ','
 
-    def __init__(self, hasher: Hasher, delimiter='|') -> None:
+    def __init__(self, hasher: Hasher, delimiter=',') -> None:
         self._delimiter = delimiter
         self._hasher = hasher
 

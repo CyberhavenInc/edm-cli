@@ -1,6 +1,8 @@
 # EDMTool
 
-`edmtool` is a command-line interface tool in Python designed to interact with Cyberhaven EDM DB API, allowing users to manage and upload hashed EDM database files to operate on them further, building EDM Rules and manage the database definitions.
+`edmtool` is a command-line interface tool, written in Python, designed to interact with the Cyberhaven EDM DB API. It allows users to manage and upload hashed EDM database files to the Cyberhaven console. Once the data is ingested into the Cyberhaven backend, it can be operated on them further from within the Cyberhaven dashboard (e.g., for building EDM Rules and managing the database definitions).
+
+For tool supports both [Spooky Hash V2](https://en.wikipedia.org/wiki/Jenkins_hash_function#SpookyHash) and [SHA256](https://en.wikipedia.org/wiki/SHA-2). 
 
 ## Table of Contents
 
@@ -22,9 +24,9 @@
 
 ## Development
 
-In order to develop you advisably need to have `Python>=3.7`, `pip` and, preferably, `virtualenv` installed in order to develop in isolation.
+For development, we recommend `Python>=3.7` and `pip`. Please also use `virtualenv` (or an alternative) in order to develop in isolation from the system-wide Python packages.
 
-If you do have `virtualenv` installed, run
+Once you install `virtualenv`, run:
 
 ```bash
 make venv
@@ -58,9 +60,11 @@ To install after building (from the dist folder), you can use pip:
 
 ```bash
 pip install ./dist/edmtool-<version>.tar.gz
+```
 
-# OR
+or you can run the following to install locally:
 
+```
 make install-local
 ```
 
@@ -75,18 +79,21 @@ A `<filename>_encoded.csv` and `<filename>_encoded_metadata.json`, please do not
 edmtool encode --algorithm "spooky" --db_file_path ./path/to/your/file.csv
 ```
 
-You can also use optional argument to indicate that your EDM DB CSV file delimiter is distinct from `'|'`
+You can also use optional argument to indicate that your EDM DB CSV file delimiter is distinct from `','`
 
 ```bash
 --db_file_delimiter ';'
 ```
+
+The supported hashing algorithms are `spooky` and `sha256`.
+
 
 ### Create a new Database Entry and upload
 
 Create an new EDM DB entry and upload the associated file.
 
 ```bash
-edmtool create_and_upload --name "Your DB Name" --description "Your Description" --file /path/to/your/file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool create_and_upload --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
 ```
 
 ### Update an existing Database Entry and upload
@@ -94,7 +101,7 @@ edmtool create_and_upload --name "Your DB Name" --description "Your Description"
 Update an existing EDM DB entry and upload the associated file.
 
 ```bash
-edmtool update_and_upload --id DATABASE_ID --description "Your Description" --file /path/to/your/updated_file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool update_and_upload --id DATABASE_ID --description "Your Description" --metadata_file_path /path/to/your/updated_file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
 ```
 
 ### Create a new Database entry
@@ -102,7 +109,7 @@ edmtool update_and_upload --id DATABASE_ID --description "Your Description" --fi
 Create the database entry based on a generated EDM DB encoded file.
 
 ```bash
-edmtool create --name "Your DB Name" --description "Your Description" --file /path/to/your/file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool create --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
 ```
 
 ### Update an existing Database entry
@@ -110,13 +117,13 @@ edmtool create --name "Your DB Name" --description "Your Description" --file /pa
 Update an existing database with a new EDM DB encoded file.
 
 ```bash
-edmtool update --name "Your DB Name" --description "Your Description" --file /path/to/your/file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool update --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url http://example.cyberhaven.com --token YOUR_AUTH_TOKEN
 ```
 
-### Upload a File
+### Upload an encoded file
 
 Upload the EDM DB encoded file. This applies to both new and existing database entries.
 
 ```bash
-edmtool upload --id DATABASE_ID --file ./path/to/your/file_encoded_metadata.json --base_url http://api.example.com --token YOUR_AUTH_TOKEN
+edmtool upload --id DATABASE_ID --metadata_file_path ./path/to/your/file_encoded_metadata.json --base_url http://api.example.com --token YOUR_AUTH_TOKEN
 ```

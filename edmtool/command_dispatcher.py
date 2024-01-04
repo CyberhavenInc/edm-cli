@@ -31,7 +31,7 @@ class CommandDispatcher:
             "--db_file_delimiter",
             help=
             "If your CSV has a different, custom delimiter, please indicate. Pay attention to the delimiter inside the cells data.",
-            default='|')
+            default=',')
         self.parser.add_argument("--metadata_file_path", help="Path to the encoded metadata file")
         self.parser.add_argument(
             "--token", help="Cyberhaven API token. Can be obtained in the Dashboard configuration.")

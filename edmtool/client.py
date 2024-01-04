@@ -96,7 +96,8 @@ class UploaderClient:
                 try:
                     response = requests.post(self.base_url + "/api/v1/edm/cli/db/upload",
                                              headers=headers,
-                                             data=m)
+                                             data=m,
+                                             timeout=1000000)
                     return self._handle_response(response)
                 except requests.Timeout:
                     pbar.close()

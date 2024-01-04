@@ -22,7 +22,9 @@ class CommandHandler:
 
         h = Hasher(args.algorithm)
         ft = FileTransformer(h, args.db_file_delimiter)
-        logging.info(f"Encoding file under path {args.db_file_path}... The delimiter is \"{args.db_file_delimiter}\".")
+        logging.info(
+            f"Encoding file under path {args.db_file_path}... The delimiter is \"{args.db_file_delimiter}\"."
+        )
         hash, size = ft.create_encoded_file(args.db_file_path)
 
         done_phrase = f"File under path {args.db_file_path} has been successfully hashed.\nChecksum is {hash} and output size is {size}."

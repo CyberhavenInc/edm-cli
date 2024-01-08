@@ -1,0 +1,19 @@
+name: Semgrep Scan
+
+on:
+  pull_request:
+  schedule:
+      - cron: "0 0 * * 0"
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep Scan
+        uses: docker://returntocorp/semgrep:1.54.3@sha256:6f650cc3f14090ae22845afe06f742f1527a0628cabbc01ebf2d996cc7bc9739
+        with:
+          args: semgrep ci --config auto

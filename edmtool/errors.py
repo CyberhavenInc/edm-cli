@@ -28,3 +28,6 @@ class DifferentCellsInTheRowError(Exception):
 
 class CellIsEmptyError(Exception):
     pass
+
+class BaseUrlIsNotHTTPS(Exception):
+    pass

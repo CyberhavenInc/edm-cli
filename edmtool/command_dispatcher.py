@@ -41,10 +41,10 @@ class CommandDispatcher:
     def capture(self):
         args = self.parser.parse_args()
 
-        client = UploaderClient(args.base_url, args.token)
-        cd = CommandHandler(client)
-
         try:
+            client = UploaderClient(args.base_url, args.token)
+            cd = CommandHandler(client)
+            
             if args.action == "create":
                 cd.create(args)
             elif args.action == "update":

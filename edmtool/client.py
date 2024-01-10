@@ -3,8 +3,10 @@ import requests
 import base64
 import json
 
+from edmtool import errors
 from tqdm import tqdm
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
+from urllib.parse import urlparse, urlunparse
 
 TIMEOUT = 60
 
@@ -12,7 +14,12 @@ TIMEOUT = 60
 class UploaderClient:
 
     def __init__(self, base_url, r_token):
-        self.base_url = base_url
+        parsed_url = urlparse(base_url)
+        if parsed_url.scheme != 'https':
+            raise errors.BaseUrlIsNotHTTPS(f"Base Url {base_url} is not HTTPS. Please change it.")
+        path = parsed_url.path.rstrip('/')
+        
+        self.base_url = urlunparse(parsed_url._replace(path=path))
         self.headers = {}
         self.auth_token = None
         self.token = r_token

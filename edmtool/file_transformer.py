@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from edmtool.utils import Calculate_file_sha256_checksum, Get_file_size, Count_file_lines
 from edmtool.hasher import Hasher
-from edmtool.errors import CellIsEmptyError, EncodedFileExistsError, DifferentCellsInTheRowError
+from edmtool.errors import EncodedFileExistsError
 
 
 class FileTransformer:

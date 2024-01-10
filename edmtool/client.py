@@ -14,15 +14,19 @@ TIMEOUT = 60
 class UploaderClient:
 
     def __init__(self, base_url, r_token):
+        if base_url is not None:
+            self._set_base_url(base_url)
+
+        self.headers = {}
+        self.auth_token = None
+        self.token = r_token
+
+    def _set_base_url(self, base_url):
         parsed_url = urlparse(base_url)
         if parsed_url.scheme != 'https':
             raise errors.BaseUrlIsNotHTTPS(f"Base Url {base_url} is not HTTPS. Please change it.")
         path = parsed_url.path.rstrip('/')
-        
         self.base_url = urlunparse(parsed_url._replace(path=path))
-        self.headers = {}
-        self.auth_token = None
-        self.token = r_token
 
     def _handle_response(self, response):
         try:

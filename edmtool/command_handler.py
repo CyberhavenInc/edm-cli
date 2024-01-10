@@ -100,11 +100,10 @@ class CommandHandler:
             raise errors.ProcessInterruptedError(
                 "Can't follow with the upload as the database creation was not successful.")
 
-        upload_response = self.upload(
+        return self.upload(
             argparse.Namespace(id=create_response.get("id"),
                                metadata_file_path=args.metadata_file_path,
                                action="upload"))
-        utils.Print_user_friendly_response("upload", upload_response)
 
     def update_and_upload(self, args):
         update_response = self.update(args)
@@ -113,8 +112,7 @@ class CommandHandler:
             raise errors.ProcessInterruptedError(
                 "Can't follow with the upload as the database updating was not successful.")
 
-        upload_response = self.upload(
+        return self.upload(
             argparse.Namespace(id=update_response.get("id"),
                                metadata_file_path=args.metadata_file_path,
                                action="upload"))
-        utils.Print_user_friendly_response("upload", upload_response)

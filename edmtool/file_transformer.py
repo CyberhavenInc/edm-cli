@@ -54,6 +54,8 @@ class FileTransformer:
             )
         first_line = []
         counter = 0
+        skipped_rows = 0
+
         try:
             with open(file_path, 'r') as src:
                 cells_count = 0
@@ -66,9 +68,7 @@ class FileTransformer:
 
                     with open(encoded_file_path, 'w') as dst:
                         for line in wrapped_file:
-                            if counter > 0:
-                                dst.write('\n')
-
+                            skip_row = False
                             base_line = line.replace("\n", "")
                             cells = base_line.split(self._delimiter)
 
@@ -80,17 +80,29 @@ class FileTransformer:
                                 continue
 
                             if len(cells) != cells_count:
-                                raise DifferentCellsInTheRowError(
-                                    f"Row {counter} has {len(cells)} cells, but it should have {cells_count} cells, as indicated in the header."
+                                counter += 1
+                                skipped_rows += 1
+                                logging.info(
+                                    f"Row {counter} has {len(cells)} cells, but it should have {cells_count} cells, as indicated in the header. The row {counter} is skipped"
                                 )
+                                skip_row = True
 
                             for i in range(len(cells)):
                                 if cells[i] != '':
                                     cells[i] = self._hasher.encode(cells[i])
                                 else:
-                                    raise CellIsEmptyError(
-                                        f"The row {counter} is malformed.\nCell {i} in the line {counter} is empty, remove the row or fill the cell with the relevant data."
+                                    counter += 1
+                                    skipped_rows += 1
+                                    logging.info(
+                                        f"The row {counter} is malformed.\nCell {i} in the line {counter} is empty, remove the row or fill the cell with the relevant data. The row {counter} is skipped"
                                     )
+                                    skip_row = True
+
+                            if skip_row:
+                                continue
+
+                            if counter > 0:
+                                dst.write('\n')
 
                             dst.write(",".join(cells))
                             counter += 1
@@ -111,7 +123,7 @@ class FileTransformer:
             'algo': self._hasher.algo,
             'date_created': datetime.now().isoformat(),
             'fields': first_line,
-            'rows': counter,
+            'rows': counter - skipped_rows,
         }
 
         with open(self._create_new_file_metadata(encoded_file_path), 'w') as f:

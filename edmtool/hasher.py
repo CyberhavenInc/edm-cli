@@ -28,10 +28,11 @@ class Hasher:
     def _work_corner_cases(self, data: str):
         # TODO: improve corner cases
         lowered_data = data.strip().lower()
-        cleaned_data = re.sub(r"[^\w'-´\s]", '', lowered_data)
-        trimmed_data = re.sub(r'\s+', " ", cleaned_data)
+        cleaned_data = re.sub(r"[\W_]+|(\s{2,})", " ", lowered_data)
 
-        return re.sub(r"['-]", " ", trimmed_data)
+        # cleaned_data = re.sub(r"[^\w'-´\s]", '', lowered_data)
+        # trimmed_data = re.sub(r'\s+', " ", cleaned_data)
+        return cleaned_data.strip()
 
     def _prepare_words(self, data: str):
         corner_cased_data = self._work_corner_cases(data)

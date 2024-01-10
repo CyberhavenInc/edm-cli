@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from edmtool.utils import Calculate_file_sha256_checksum, Get_file_size, Count_file_lines
 from edmtool.hasher import Hasher
-from edmtool.errors import CellIsEmptyError, EncodedFileExistsError, DifferentCellsInTheRowError
+from edmtool.errors import EncodedFileExistsError
 
 
 class FileTransformer:
@@ -52,8 +52,10 @@ class FileTransformer:
             raise EncodedFileExistsError(
                 f"Encoded file exists under path {encoded_file_path}, please remove it first to proceed."
             )
-        first_line = ""
+        first_line = []
         counter = 0
+        skipped_rows = 0
+
         try:
             with open(file_path, 'r') as src:
                 cells_count = 0
@@ -61,41 +63,50 @@ class FileTransformer:
                 with tqdm(src,
                           total=Count_file_lines(file_path),
                           unit_scale=True,
-                          desc=f"Hashing the file {file_path} with {self._hasher.algo}",
+                          desc=f"INFO: Hashing the file {file_path} with {self._hasher.algo}",
                           initial=0) as wrapped_file:
 
                     with open(encoded_file_path, 'w') as dst:
-                        skipped_first_line_break = False
                         for line in wrapped_file:
+                            skip_row = False
+                            base_line = line.replace("\n", "")
+                            cells = base_line.split(self._delimiter)
+
                             if counter == 0:
-                                headers = line.split(self._delimiter)
-                                dst.write(','.join(headers))
-                                first_line = line.replace("\n", "")
-                                cells_count = len(headers)
+                                first_line = cells
+                                cells_count = len(cells)
+                                dst.write(','.join(cells))
                                 counter += 1
                                 continue
 
-                            counter += 1
-                            cells = line.split(self._delimiter)
                             if len(cells) != cells_count:
-                                raise DifferentCellsInTheRowError(
-                                    f"Row {counter} has {len(cells)} cells, but it should have {cells_count} cells, as indicated in the header."
+                                counter += 1
+                                skipped_rows += 1
+                                logging.info(
+                                    f"Row {counter} has {len(cells)} cells, but it should have {cells_count} cells, as indicated in the header. The row {counter} is skipped"
                                 )
+                                skip_row = True
 
                             for i in range(len(cells)):
                                 if cells[i] != '':
                                     cells[i] = self._hasher.encode(cells[i])
                                 else:
-                                    raise CellIsEmptyError(
-                                        f"The row {counter} is malformed.\nCell {i} in the line {counter} is empty, remove the row or fill the cell with the relevant data."
+                                    counter += 1
+                                    skipped_rows += 1
+                                    logging.info(
+                                        f"The row {counter} is malformed.\nCell {i} in the line {counter} is empty, remove the row or fill the cell with the relevant data. The row {counter} is skipped"
                                     )
+                                    skip_row = True
 
-                            if not skipped_first_line_break:
-                                skipped_first_line_break = True
-                            else:
-                                dst.write("\n")
+                            if skip_row:
+                                continue
+
+                            if counter > 0:
+                                dst.write('\n')
 
                             dst.write(",".join(cells))
+                            counter += 1
+
         except Exception as e:
             # remove the corrupted file
             if os.path.exists(encoded_file_path):
@@ -111,8 +122,8 @@ class FileTransformer:
             'size': size,
             'algo': self._hasher.algo,
             'date_created': datetime.now().isoformat(),
-            'fields': first_line.split(self._delimiter),
-            'rows': counter,
+            'fields': first_line,
+            'rows': counter - skipped_rows,
         }
 
         with open(self._create_new_file_metadata(encoded_file_path), 'w') as f:

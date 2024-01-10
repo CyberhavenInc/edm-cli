@@ -4,7 +4,7 @@ build:
 build-clean:
 	rm -rf ./dist ./build ./edmtool.egg-info
 
-install-dev:
+install-for-dev:
 	pip install .[dev]
 
 install-local:
@@ -16,5 +16,5 @@ format:
 test:
 	python -m unittest discover -s edmtool/tests -p 'test_*.py'
 
-venv:
+create_venv:
 	virtualenv .venv --system-site-packages

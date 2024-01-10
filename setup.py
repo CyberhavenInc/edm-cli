@@ -4,7 +4,7 @@ setup(
     name="edmtool",
     version="0.1",
     packages=find_packages(".", ["./edmtool/tests"]),
-    install_requires=['requests>=2.28.0', 'tqdm>=4.66.1', 'spookyhash>=2.1.0', 'requests_toolbelt>=1.0.0'],
+    install_requires=['requests>=2.31.0', 'tqdm>=4.66.1', 'spookyhash>=2.1.0', 'requests_toolbelt>=1.0.0'],
     extras_require={
         'dev': [
             'yapf',

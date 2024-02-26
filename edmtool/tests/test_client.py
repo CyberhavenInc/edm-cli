@@ -3,13 +3,18 @@ import unittest
 from io import BytesIO
 from unittest.mock import patch, Mock, mock_open
 from edmtool.client import UploaderClient
+from edmtool import errors
 
 
 class TestUploaderClient(unittest.TestCase):
 
     def setUp(self):
-        self.client = UploaderClient(base_url="http://test.com",
+        self.client = UploaderClient(base_url="https://test.com",
                                      r_token="dXNlcm5hbWU6cGFzc3dvcmQ=")  # username:password
+
+    def test_set_base_url(self):
+        with self.assertRaises(errors.BaseUrlIsNotHTTPS):
+            UploaderClient("http://test.com", "dXNlcm5hbWU6cGFzc3dvcmQ=")
 
     @patch('requests.post')
     @patch('requests.post')

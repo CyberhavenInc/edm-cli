@@ -4,6 +4,35 @@ from edmtool.hasher import Hasher
 
 class TestHasher(unittest.TestCase):
 
+    examples = [
+        "Malani-e",
+        "Malani'e",
+        "Malani`e",
+        "Malani_e",
+        "Malani´e",
+        "Malani e",
+        "Malanie`",
+        "Malanie'",
+        "Malanie_",
+        "Malanie´",
+        "Malanie ",
+        "Malanie-",
+    ]
+    encoded_examples = [
+        "2|Kt5JjRhFkmE=",
+        "2|Kt5JjRhFkmE=",
+        "2|Kt5JjRhFkmE=",
+        "2|Kt5JjRhFkmE=",
+        "2|yILM4iRjvOw=",
+        "2|Kt5JjRhFkmE=",
+        "1|hgGce4EZtUs=",
+        "1|hgGce4EZtUs=",
+        "1|hgGce4EZtUs=",
+        "2|Ngzhonfkvyo=",
+        "1|hgGce4EZtUs=",
+        "1|hgGce4EZtUs=",
+    ]
+
     def test_sha256(self):
         h = Hasher('sha256')
         self.assertEqual(h.encode("Mary Jones"), "2|Av4c8KiE0Eee3L3GCnZwnIRJibYlpcGXgz3XHc6zM8A=")
@@ -27,6 +56,11 @@ class TestHasher(unittest.TestCase):
     def test_spooky_with_multiple_apostrophes(self):
         h = Hasher('spooky', 131313)
         self.assertEqual(h.encode("M'ary's Jones"), "4|9G/d0UUi2lI=")
+
+    def test_spooky_hash_battery(self):
+        h = Hasher('spooky', 131313)
+        for i, example in enumerate(self.examples):
+            self.assertEqual(h.encode(example), self.encoded_examples[i])
 
 
 if __name__ == '__main__':

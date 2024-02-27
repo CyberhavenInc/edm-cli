@@ -2,7 +2,7 @@
 
 `edmtool` is a command-line interface tool, written in Python, designed to interact with the Cyberhaven EDM DB API. It allows users to manage and upload hashed EDM database files to the Cyberhaven console. Once the data is ingested into the Cyberhaven backend, it can be operated on them further from within the Cyberhaven dashboard (e.g., for building EDM Rules and managing the database definitions).
 
-For tool supports both [Spooky Hash V2](https://en.wikipedia.org/wiki/Jenkins_hash_function#SpookyHash) and [SHA256](https://en.wikipedia.org/wiki/SHA-2). 
+Our tool supports both [Spooky Hash V2](https://en.wikipedia.org/wiki/Jenkins_hash_function#SpookyHash) and [SHA256](https://en.wikipedia.org/wiki/SHA-2).
 
 ## Table of Contents
 
@@ -64,7 +64,7 @@ pip install ./dist/edmtool-<version>.tar.gz
 
 or you can run the following to install locally:
 
-```
+```bash
 make install-local
 ```
 
@@ -86,7 +86,6 @@ You can also use optional argument to indicate that your EDM DB CSV file delimit
 ```
 
 The supported hashing algorithms are `spooky` and `sha256`.
-
 
 ### Create a new Database Entry and upload
 

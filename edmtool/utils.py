@@ -12,7 +12,7 @@ logging.basicConfig(format='%(levelname)s: %(message)s')
 def Count_file_lines(filename: str):
     line_count = 0
     with open(filename, "r") as f:
-        line_count = sum(1 for line in f)
+        line_count = sum(1 for _ in f)
     return line_count
 
 

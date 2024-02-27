@@ -17,7 +17,6 @@ class FileTransformer:
         self._delimiter = delimiter
         self._hasher = hasher
 
-    # optional to develop in the future(?)
     def _create_new_file_encoded(self, path: str):
         directory, filename = os.path.split(path)
         new_filename = filename.split('.')[0] + '_encoded.csv'
@@ -34,17 +33,6 @@ class FileTransformer:
 
     def check_file_exists(self, path: str):
         return os.path.exists(path) and path.endswith('.csv')
-
-    def _check_file_to_append(self, path: str):
-        if not self.check_file_exists(path):
-            return 0
-
-        with open(path, 'r') as file:
-            line_count = 0
-            for _ in file:
-                line_count += 1
-
-        return line_count
 
     def create_encoded_file(self, file_path: str):
         encoded_file_path = self._create_new_file_encoded(file_path)

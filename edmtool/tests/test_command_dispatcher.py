@@ -10,6 +10,8 @@ class TestCommandDispatcher(unittest.TestCase):
     def test_capture_create(self, mock_parse_args, mock_CommandHandler):
         mock_args = Mock()
         mock_args.action = "create"
+        mock_args.base_url = "https://localhost:8080"
+        mock_args.token = "test_token"
         mock_parse_args.return_value = mock_args
 
         dispatcher = CommandDispatcher()
@@ -22,6 +24,8 @@ class TestCommandDispatcher(unittest.TestCase):
     def test_capture_create_and_upload(self, mock_parse_args, mock_CommandHandler):
         mock_args = Mock()
         mock_args.action = "create_and_upload"
+        mock_args.base_url = "https://localhost:8080"
+        mock_args.token = "test_token"
         mock_parse_args.return_value = mock_args
 
         dispatcher = CommandDispatcher()
@@ -34,6 +38,8 @@ class TestCommandDispatcher(unittest.TestCase):
     def test_capture_upload(self, mock_parse_args, mock_CommandHandler):
         mock_args = Mock()
         mock_args.action = "upload"
+        mock_args.base_url = "https://localhost:8080"
+        mock_args.token = "test_token"
         mock_parse_args.return_value = mock_args
 
         dispatcher = CommandDispatcher()

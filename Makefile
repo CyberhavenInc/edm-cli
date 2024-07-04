@@ -4,7 +4,7 @@ build:
 build-clean:
 	rm -rf ./dist ./build ./edmtool.egg-info
 
-install-for-dev:
+install-dev-deps:
 	pip install .[dev]
 
 install-local:

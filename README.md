@@ -29,7 +29,7 @@ For development, we recommend `Python>=3.7` and `pip`. Please also use `virtuale
 Once you install `virtualenv`, run:
 
 ```bash
-make venv
+make create_venv
 
 # IMPORTANT!
 # activate the venv
@@ -39,7 +39,7 @@ source .venv/bin/activate
 To install all dependencies
 
 ```bash
-make install-dev
+make install-for-dev
 ```
 
 Also it is possible to run the CLI for testing purposes without building and installing it locally:

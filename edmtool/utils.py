@@ -100,7 +100,7 @@ def Print_user_friendly_response(action, response):
             logging.info(f"File successfully uploaded to the database")
         else:
             raise errors.ServerError(
-                "Failed to upload the file. Please check the provided parameters and try again.")
+                "Failed to upload the file. If the status is 413 or 404 you have an outdated version of your tenant, please contact CX, otherwise, please check the provided parameters and try again.")
 
     if not response:
         raise errors.MissingArgumentsError(
@@ -132,7 +132,7 @@ def Print_user_friendly_response(action, response):
 
     elif action == "create_and_upload":
         if response:
-            logging.info(f"Database successfully created and uploaded to the following Database")
+            logging.info(f"Database successfully created and starting upload process.")
         else:
             raise errors.ServerError(
-                f"Failed to upload the file. Please check the provided parameters and try again.")
+                f"Failed to create the database. Please check the provided parameters and try again.")

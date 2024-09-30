@@ -98,7 +98,7 @@ The supported hashing algorithms are `spooky` and `sha256`.
 Create an new EDM DB entry and upload the associated file. The file has to be hashed prior to creating the database entry.
 
 ```bash
-edmtool create_and_upload --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url https://api.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool create_and_upload --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url https://your-tenant.cyberhaven.io --token YOUR_AUTH_TOKEN
 ```
 
 ### Update an existing Database Entry and upload
@@ -106,7 +106,7 @@ edmtool create_and_upload --name "Your DB Name" --description "Your Description"
 Update an existing EDM DB entry and upload updated associated file. The file has to be hashed prior to updating the database entry.
 
 ```bash
-edmtool update_and_upload --id DATABASE_ID --description "Your Description" --metadata_file_path /path/to/your/updated_file_encoded_metadata.json --base_url https://api.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool update_and_upload --id DATABASE_ID --description "Your Description" --metadata_file_path /path/to/your/updated_file_encoded_metadata.json --base_url https://your-tenant.cyberhaven.io --token YOUR_AUTH_TOKEN
 ```
 
 ### Create a new Database entry (without uploading)
@@ -114,7 +114,7 @@ edmtool update_and_upload --id DATABASE_ID --description "Your Description" --me
 Create the database entry based on a generated EDM DB encoded file. The file has to be hashed prior to creating the database entry.
 
 ```bash
-edmtool create --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url https://api.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool create --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url https://your-tenant.cyberhaven.io --token YOUR_AUTH_TOKEN
 ```
 
 ### Update an existing Database entry (without uploading)
@@ -122,7 +122,7 @@ edmtool create --name "Your DB Name" --description "Your Description" --metadata
 Update an existing database with a new EDM DB encoded file.
 
 ```bash
-edmtool update --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url https://api.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool update --name "Your DB Name" --description "Your Description" --metadata_file_path /path/to/your/file_encoded_metadata.json --base_url https://your-tenant.cyberhaven.io --token YOUR_AUTH_TOKEN
 ```
 
 ### Upload an encoded file
@@ -130,5 +130,5 @@ edmtool update --name "Your DB Name" --description "Your Description" --metadata
 Upload the EDM DB encoded file. This applies to both new and existing database entries.
 
 ```bash
-edmtool upload --id DATABASE_ID --metadata_file_path ./path/to/your/file_encoded_metadata.json --base_url https://api.cyberhaven.com --token YOUR_AUTH_TOKEN
+edmtool upload --id DATABASE_ID --metadata_file_path ./path/to/your/file_encoded_metadata.json --base_url https://your-tenant.cyberhaven.io --token YOUR_AUTH_TOKEN
 ```

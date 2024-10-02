@@ -109,7 +109,7 @@ class UploaderClient:
             headers.update(self.headers)
 
             try:
-                response = requests.post(f"{self.base_url}/api/v3/edm/cli/db/upload/{db_id}",
+                response = requests.post(f"{self.base_url}/api/v2/edm/cli/db/upload/{db_id}",
                                          headers=headers,
                                          data=file_reader(f),
                                          timeout=TIMEOUT)

@@ -100,7 +100,7 @@ def Print_user_friendly_response(action, response):
             logging.info(f"File successfully uploaded to the database")
         else:
             raise errors.ServerError(
-                "Failed to upload the file. If the status is 413 or 404 you have an outdated version of your tenant, please contact CX, otherwise, please check the provided parameters and try again.")
+                "Failed to upload the file. If the status is 413 or 404 you have an outdated version of your tenant, please contact support, otherwise, please check the provided parameters and try again.")
 
     if not response:
         raise errors.MissingArgumentsError(

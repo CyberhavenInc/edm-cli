@@ -8,7 +8,7 @@ from tqdm import tqdm
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 from urllib.parse import urlparse, urlunparse
 
-TIMEOUT = 60
+TIMEOUT = 300
 
 
 class UploaderClient:
@@ -31,7 +31,6 @@ class UploaderClient:
     def _handle_response(self, response):
         try:
             response.raise_for_status()
-
             if 'application/json' in response.headers.get('content-type', ''):
                 return response.json()
             else:
@@ -42,7 +41,7 @@ class UploaderClient:
                 raise Exception(
                     f"Server status: {response.status_code}, response: {error_response}.\n")
             except json.JSONDecodeError:
-                return e
+                raise e
         except Exception as e:
             raise Exception(f"An error occurred: {e}\n")
 
@@ -90,30 +89,29 @@ class UploaderClient:
             logging.error(f"The request to update the db with the ID {id} and timed out.")
             return None
 
-    def _upload_database(self, db_id, encoded_file_path, encoded_file_size, encoded_file_name):
-        upload_size = encoded_file_size
+    def _upload_database(self, db_id, encoded_file_path, encoded_file_size):
+        with open(encoded_file_path, 'rb') as f, tqdm(
+                total=encoded_file_size,
+                unit='B',
+                unit_scale=True,
+                desc=f"INFO: Uploading encoded EDM DB file into the database \"{db_id}\"",
+                initial=0) as pbar:
 
-        with tqdm(total=upload_size,
-                  unit='B',
-                  unit_scale=True,
-                  desc=f"INFO: Uploading encoded EDM DB file into the database \"{db_id}\"",
-                  initial=0) as pbar:
+            def file_reader(file_obj, chunk_size=1024):
+                while True:
+                    chunk = file_obj.read(chunk_size)
+                    if not chunk:
+                        break
+                    pbar.update(len(chunk))
+                    yield chunk
 
-            fields = {
-                "id": db_id,
-                "file": (encoded_file_name, open(encoded_file_path, 'rb'), 'text/csv')
-            }
-
-            multipart_data = MultipartEncoder(fields=fields)
-            multipart_monitor = MultipartEncoderMonitor(
-                multipart_data, lambda monitor: pbar.update(monitor.bytes_read - pbar.n))
-            headers = {"Content-Type": multipart_monitor.content_type}
+            headers = {"Content-Type": "application/octet-stream"}
             headers.update(self.headers)
 
             try:
-                response = requests.post(self.base_url + "/api/v1/edm/cli/db/upload",
+                response = requests.post(f"{self.base_url}/api/v2/edm/cli/db/upload/{db_id}",
                                          headers=headers,
-                                         data=multipart_monitor,
+                                         data=file_reader(f),
                                          timeout=TIMEOUT)
                 return self._handle_response(response)
             except requests.Timeout:
@@ -129,8 +127,7 @@ class UploaderClient:
 
     def upload(self, db_id, encoded_file_path, metadata):
         self.get_token()
-        return self._upload_database(db_id, encoded_file_path, metadata["size"],
-                                     metadata["filename"])
+        return self._upload_database(db_id, encoded_file_path, metadata["size"])
 
     def get_token(self):
         if self.auth_token:

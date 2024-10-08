@@ -76,6 +76,12 @@ make install-local
 
 ## Usage
 
+### Create API token
+
+To use `edmtool`, you need to create an API token in the Cyberhaven console. The token is used to authenticate the tool with the Cyberhaven backend.
+
+Open "Settings" > "API token management (legacy)" and create a new token. Copy the token and use it as `YOUR_AUTH_TOKEN` in the following commands.
+
 ### Hash EDM DB file
 
 It takes an input file provided by you and generates 2 new output files.

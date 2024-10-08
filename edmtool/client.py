@@ -133,7 +133,16 @@ class UploaderClient:
         if self.auth_token:
             return
         authz_url: str = f"{self.base_url}/user-management/auth/token"
-        token_contents = base64.b64decode(self.token).decode("utf-8")
+
+        try:
+            token_contents = base64.b64decode(self.token).decode("utf-8")
+
+        except base64.binascii.Error as e:
+            logging.error(
+                f"The provided token is invalid. You can create a new token on \"API token management (legacy)\" page "
+                f"in \"Settings\" (https://your-tenant.cyberhaven.io/preferences/api-tokens). Details: {e}")
+            return None
+
         try:
             response = requests.post(authz_url,
                                      data=token_contents,

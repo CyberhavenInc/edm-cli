@@ -99,6 +99,14 @@ You can also use optional argument to indicate that your EDM DB CSV file delimit
 
 The supported hashing algorithms are `spooky` and `sha256`.
 
+If your EDM DB file contains empty cells (e.g., missing email or phone number), you can use the `--allow_empty_cells` flag to include those rows in the output. Without this flag, rows with empty cells are skipped.
+
+```bash
+edmtool encode --algorithm "sha256" --db_file_path ./path/to/your/file.csv --allow_empty_cells
+```
+
+Empty cells will be hashed but will never produce matches during evaluation. This feature requires Nucleuz SDK v4.600 or later.
+
 ### Create a new Database Entry and upload
 
 Create an new EDM DB entry and upload the associated file. The file has to be hashed prior to creating the database entry.

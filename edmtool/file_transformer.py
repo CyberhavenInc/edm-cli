@@ -13,9 +13,10 @@ from edmtool.errors import EncodedFileExistsError
 class FileTransformer:
     _encoded_delimiter = ','
 
-    def __init__(self, hasher: Hasher, delimiter=',') -> None:
+    def __init__(self, hasher: Hasher, delimiter=',', allow_empty_cells=False) -> None:
         self._delimiter = delimiter
         self._hasher = hasher
+        self._allow_empty_cells = allow_empty_cells
 
     def _create_new_file_encoded(self, path: str):
         directory, filename = os.path.split(path)
@@ -76,13 +77,12 @@ class FileTransformer:
                                 skip_row = True
 
                             for i in range(len(cells)):
-                                if cells[i] != '':
+                                if cells[i] != '' or self._allow_empty_cells:
                                     cells[i] = self._hasher.encode(cells[i])
                                 else:
-                                    counter += 1
                                     skipped_rows += 1
                                     logging.info(
-                                        f"The row {counter} is malformed.\nCell {i} in the line {counter} is empty, remove the row or fill the cell with the relevant data. The row {counter} is skipped"
+                                        f"Row {counter} has an empty cell at position {i}. The row is skipped. Use --allow_empty_cells to include rows with empty cells."
                                     )
                                     skip_row = True
 

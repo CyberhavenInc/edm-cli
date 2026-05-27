@@ -21,7 +21,8 @@ class CommandHandler:
             )
 
         h = Hasher(args.algorithm)
-        ft = FileTransformer(h, args.db_file_delimiter)
+        allow_empty_cells = getattr(args, 'allow_empty_cells', False)
+        ft = FileTransformer(h, args.db_file_delimiter, allow_empty_cells=allow_empty_cells)
         logging.info(
             f"Encoding file under path {args.db_file_path}... The delimiter is \"{args.db_file_delimiter}\"."
         )

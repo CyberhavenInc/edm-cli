@@ -37,6 +37,11 @@ class CommandDispatcher:
             "--token", help="Cyberhaven API token. Can be obtained in the Dashboard configuration.")
         self.parser.add_argument(
             "--base_url", help="Base URL of the API (should be your cluster deployment URL).")
+        self.parser.add_argument(
+            "--allow_empty_cells",
+            action="store_true",
+            default=False,
+            help="Allow empty cells in the EDM database. Empty cells will be hashed but will never match during evaluation.")
 
     def capture(self):
         args = self.parser.parse_args()

@@ -105,7 +105,7 @@ If your EDM DB file contains empty cells (e.g., missing email or phone number), 
 edmtool encode --algorithm "sha256" --db_file_path ./path/to/your/file.csv --allow_empty_cells
 ```
 
-Empty cells will be hashed but will never produce matches during evaluation. This feature requires Nucleuz SDK v4.600 or later.
+Empty cells will be hashed but will never produce matches during evaluation.
 
 ### Create a new Database Entry and upload
 

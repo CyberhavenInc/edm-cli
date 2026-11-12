@@ -62,6 +62,10 @@ def parse_purview_col(spec: str):
         name = name[:-len(":case")]
     if not name:
         raise errors.MissingArgumentsError(f"bad --purview-col {spec!r}")
+    if ignored.endswith(":case"):
+        raise errors.MissingArgumentsError(
+            f"--purview-col {spec!r}: put ':case' before ':ignored=' (to ignore those characters, list them as 'case:')"
+        )
     return name, purview_view(lowercase, ignored)
 
 

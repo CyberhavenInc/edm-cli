@@ -77,7 +77,7 @@ class TestPurviewCol(unittest.TestCase):
             with self.subTest(spec=spec):
                 n, v = keyed.parse_purview_col(spec)
                 self.assertEqual((n, v.lowercase, v.ignored), (name, lower, ignored))
-        for bad in ("", ":case", ":ignored=-"):
+        for bad in ("", ":case", ":ignored=-", "id:ignored=-:case"):
             with self.subTest(spec=bad), self.assertRaises(errors.MissingArgumentsError):
                 keyed.parse_purview_col(bad)
 

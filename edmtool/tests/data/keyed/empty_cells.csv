@@ -1,0 +1,12 @@
+#edm-hashed {"format":"edm","version":1,"algo":"hmac-sha256","key_id":"a0d429b92500ba17","lower":"simple","views":[{"seps":"purview","lowercase":true,"ignored":""}],"columns":[{"name":"name","view":0,"shapes":[[1,2,3],[1,4,3],[2,2,10],[2,4,11],[2,6,13],[2,6,16],[2,6,17],[19,2,116]],"long_shapes":true,"prefixes":[[1,2,4],[1,2,8],[1,4,7],[1,6,4],[1,6,9],[2,2,9],[3,2,13],[4,2,17]]},{"name":"city","view":0,"shapes":[[1,2,4],[1,2,5],[1,4,5],[1,4,8],[2,2,8],[2,4,7],[2,6,7],[2,6,9]],"long_shapes":true,"prefixes":[[1,2,2],[1,2,3],[1,4,3],[1,6,3],[1,6,4]]},{"name":"id","view":0,"shapes":[[1,1,1],[1,1,4],[1,1,5],[1,2,4],[1,3,5],[1,5,11],[2,2,9],[2,3,4]],"long_shapes":true,"prefixes":[[1,2,2],[1,2,4]]},{"name":"email","view":0,"shapes":[[2,6,5],[2,6,7],[2,6,9],[2,6,10],[3,6,22]],"long_shapes":true,"prefixes":[[1,2,4],[1,6,3],[1,6,4],[1,6,5],[1,6,6],[1,6,7],[2,6,18]]}],"rows":10}
+name,city,id,email
+2|5oXeCmS9wrQ=,2|SDUiyGSU/7E=,1|r8FTlGqZC0E=,3|OG6uQwLdgEw=
+2|8YGjbiT+9Ic=,2|lx8of3WGx1k=,1|GxWN1UlFnXQ=,2|2wSyfgqKaq0=
+1|0gk31TZI1uw=,2|ucZGy7FJGWY=,1|/6UeEYBnRcc=,2|yjYui71sSvg=
+2|FASJKn7X4Aw=,1|DdXDN8YlKJg=,2|DZLbSQLitCw=,2|qtPFsDocKV4=
+2|/Zca8i4rnz0=,1|X6rLpiTTu6Y=,2|bc6FJlzLdzc=,2|vJlymEdCE38=
+2|1j6AdoNCoE4=,2|b31d3itwWlg=,1|wMwiH5Kxxuc=,2|Xu2jZbgphG4=
+0|ZoIgaZdtbUw=,1|EwwzgkkqujA=,1|F83bjgnsRo4=,2|VIZ/9ZMuG9w=
+1|MBAl5vHHrSw=,0|ZoIgaZdtbUw=,1|Le4GCa+5XvM=,2|1Y6Vfj/MGfc=
+2|ybP/DAW9PAs=,2|qqFnRA0iYKU=,1|A/fF5nJFqT8=,2|oB+lfGsxgSE=
+19|j5TvJVLvoLk=,1|TYbko/y6trA=,1|8sJB1IfR07w=,2|+h0ILiOPCA0=

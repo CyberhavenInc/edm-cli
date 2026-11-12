@@ -6,10 +6,18 @@ from edmtool.client import UploaderClient
 from edmtool.command_handler import CommandHandler
 
 
+class _Parser(argparse.ArgumentParser):
+    """Options in `exact_only` are not prefix-matched, so they never make older abbreviations ambiguous."""
+    exact_only = frozenset()
+
+    def _get_option_tuples(self, option_string):
+        return [t for t in super()._get_option_tuples(option_string) if t[1] not in self.exact_only]
+
+
 class CommandDispatcher:
 
     def __init__(self):
-        self.parser = argparse.ArgumentParser(description="Database Client CLI")
+        self.parser = _Parser(description="Database Client CLI")
         self.parser.add_argument("action",
                                  choices=[
                                      "encode", "create", "update", "upload", "create_and_upload",
@@ -23,9 +31,41 @@ class CommandDispatcher:
         self.parser.add_argument("--description",
                                  type=utils.Validate_description,
                                  help="Database description for create action (max 255 chars).")
-        self.parser.add_argument("--algorithm",
-                                 choices=["spooky", "sha256"],
-                                 help="Database algorithm for create and update action.")
+        self.parser.add_argument(
+            "--algorithm",
+            "--algo",
+            choices=["spooky", "sha256", "hmac-sha256"],
+            help="Hashing algorithm for encode. hmac-sha256 is keyed and needs --key-file.")
+        self.parser.add_argument(
+            "--key-file",
+            "--key_file",
+            dest="key_file",
+            help="hmac-sha256: file with the tenant key in hex (else $EDM_KEY_HEX).")
+        self.parser.add_argument("--tokenizer",
+                                 choices=["purview", "wb"],
+                                 help="hmac-sha256: default column tokenizer (default purview).")
+        self.parser.add_argument(
+            "--lower",
+            choices=["simple", "python"],
+            help="hmac-sha256: cell lowercasing (default simple, same as document scanning).")
+        self.parser.add_argument(
+            "--purview-col",
+            "--purview_col",
+            dest="purview_col",
+            action="append",
+            default=[],
+            metavar="NAME[:case][:ignored=CHARS]",
+            help="hmac-sha256: Purview tokenization for one column (repeatable). 'case' makes it "
+            "case sensitive, 'ignored' lists characters removed from its tokens.")
+        self.parser.add_argument("--no-shapes",
+                                 "--no_shapes",
+                                 dest="no_shapes",
+                                 action="store_true",
+                                 help="hmac-sha256: omit the shape metadata used for scan gating.")
+        self.parser.exact_only = frozenset([
+            "--algo", "--key-file", "--key_file", "--tokenizer", "--lower", "--purview-col",
+            "--purview_col", "--no-shapes", "--no_shapes"
+        ])
         self.parser.add_argument("--db_file_path", help="Path to the original file for encoding.")
         self.parser.add_argument(
             "--db_file_delimiter",

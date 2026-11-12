@@ -6,9 +6,20 @@ from edmtool import utils
 from edmtool.client import UploaderClient
 from edmtool.file_transformer import FileTransformer
 from edmtool.hasher import Hasher
+from edmtool import keyed
 
 
 class CommandHandler:
+    _KEYED_ARGS = ('key_file', 'tokenizer', 'lower', 'purview_col', 'no_shapes')
+
+    @staticmethod
+    def _read_uploadable_metadata(path):
+        metadata = utils.Read_metadata_file(path)
+        # The backend does not know the edm format yet and would store it as SHA256.
+        if metadata.get('algo') == keyed.ALGO:
+            raise errors.UnsupportedAlgorithmError(
+                f"{keyed.ALGO} databases cannot be uploaded yet; use spooky or sha256.")
+        return metadata
 
     def __init__(self, client: UploaderClient):
         self.client = client
@@ -20,9 +31,24 @@ class CommandHandler:
                 f"The following arguments are required for the 'encode' action: {', '.join(missing_args)}"
             )
 
-        h = Hasher(args.algorithm)
         allow_empty_cells = getattr(args, 'allow_empty_cells', False)
-        ft = FileTransformer(h, args.db_file_delimiter, allow_empty_cells=allow_empty_cells)
+        keyed_args = {a: getattr(args, a, None) for a in self._KEYED_ARGS}
+        if args.algorithm == keyed.ALGO:
+            kw = {k: keyed_args[k] for k in ('tokenizer', 'lower') if keyed_args[k]}
+            opts = keyed.KeyedOptions(keyed.load_key(keyed_args['key_file']),
+                                      purview_cols=keyed_args['purview_col'] or (),
+                                      shapes=not keyed_args['no_shapes'],
+                                      delimiter=args.db_file_delimiter,
+                                      allow_empty_cells=allow_empty_cells,
+                                      **kw)
+            ft = keyed.KeyedFileTransformer(opts)
+        else:
+            given = ', '.join('--' + a.replace('_', '-') for a, v in keyed_args.items() if v)
+            if given:
+                raise errors.MissingArgumentsError(f"{given} need --algorithm {keyed.ALGO}")
+            ft = FileTransformer(Hasher(args.algorithm),
+                                 args.db_file_delimiter,
+                                 allow_empty_cells=allow_empty_cells)
         logging.info(
             f"Encoding file under path {args.db_file_path}... The delimiter is \"{args.db_file_delimiter}\"."
         )
@@ -38,7 +64,7 @@ class CommandHandler:
                 f"The following arguments are required for the 'create' action: {', '.join(missing_args)}"
             )
 
-        metadata = utils.Read_metadata_file(args.metadata_file_path)
+        metadata = self._read_uploadable_metadata(args.metadata_file_path)
 
         response = self.client.create_database(name=args.name,
                                                description=args.description,
@@ -59,7 +85,7 @@ class CommandHandler:
                 f"The following arguments are required for the 'update' action: {', '.join(missing_args)}"
             )
 
-        metadata = utils.Read_metadata_file(args.metadata_file_path)
+        metadata = self._read_uploadable_metadata(args.metadata_file_path)
         response = self.client.update_database(id=args.id,
                                                rows=metadata["rows"],
                                                size=metadata["size"],
@@ -76,7 +102,7 @@ class CommandHandler:
             raise errors.MissingArgumentsError(
                 "Please provide both --metadata_file_path and --id for the upload action.")
 
-        metadata = utils.Read_metadata_file(args.metadata_file_path)
+        metadata = self._read_uploadable_metadata(args.metadata_file_path)
         encoded_file_path = utils.Get_file_path_from_metadata(metadata['filename'],
                                                               args.metadata_file_path)
 

@@ -1,0 +1,13 @@
+name,city,id,email
+John Smith,New York,12345,john.smith@example.com
+José García-López,São Paulo,ＡＢ１２３,jose@ex.es
+王小明,北京市 朝阳区,９８７６,wang@ex.cn
+İSTANBUL Ömer,ΟΔΥΣΣΕΑΣ,ﬁle ﬃx,omer@ex.tr
+Σίσυφος ΣΑΣ,Αθήνα,㎏ ①,σ@ex.gr
+Mary-Jane O'Neil,St. Louis,000-12-3456,MJ@Ex.com
+,empty,0,x@y.z
+Ana,,7,ana@ex.com
+bad,width
+
+Ｆｕｌｌ　Ｗｉｄｔｈ,Köln	DE,ⅷ,full@ex.de
+Long Name One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen,Here,1,l@x.y

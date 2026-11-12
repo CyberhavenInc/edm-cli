@@ -32,3 +32,11 @@ class CellIsEmptyError(Exception):
 
 class BaseUrlIsNotHTTPS(Exception):
     pass
+
+
+class InvalidKeyError(Exception):
+    pass
+
+
+class UnsupportedAlgorithmError(Exception):
+    pass
